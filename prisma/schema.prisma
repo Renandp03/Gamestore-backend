@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model address {
+  id       Int     @id(map: "address_pk") @default(autoincrement())
+  streetId Int
+  cityId   Int
+  stateId  Int
+  street   street  @relation(fields: [streetId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "address_fk0")
+  city     city    @relation(fields: [cityId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "address_fk1")
+  state    state   @relation(fields: [stateId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "address_fk2")
+  users    users[]
+}
+
+model city {
+  id      Int       @id(map: "city_pk") @default(autoincrement())
+  stateId Int
+  name    String    @db.VarChar
+  address address[]
+  state   state     @relation(fields: [stateId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "city_fk0")
+  street  street[]
+}
+
+model consoles {
+  id    Int     @id(map: "consoles_pk") @default(autoincrement())
+  name  String  @unique @db.VarChar
+  games games[]
+}
+
+model exchanges {
+  id                                   Int      @id(map: "exchanges_pk") @default(autoincrement())
+  desiredGameId                        Int
+  offeredGameId                        Int
+  status                               String
+  createdAt                            DateTime @db.Timestamp(6)
+  updatedAt                            DateTime @db.Timestamp(6)
+  games_exchanges_desiredGameIdTogames games    @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
+  games_exchanges_offeredGameIdTogames games    @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
+}
+
+model favorits {
+  id     Int   @id(map: "favorits_pk") @default(autoincrement())
+  userId Int
+  gameId Int
+  users  users @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorits_fk0")
+  games  games @relation(fields: [gameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorits_fk1")
+}
+
+model games {
+  id                                       Int         @id(map: "games_pk") @default(autoincrement())
+  ownerId                                  Int
+  consoleId                                Int
+  name                                     String      @db.VarChar
+  image                                    String
+  exchanges_exchanges_desiredGameIdTogames exchanges[] @relation("exchanges_desiredGameIdTogames")
+  exchanges_exchanges_offeredGameIdTogames exchanges[] @relation("exchanges_offeredGameIdTogames")
+  favorits                                 favorits[]
+  users                                    users       @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk0")
+  consoles                                 consoles    @relation(fields: [consoleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk1")
+}
+
+model state {
+  id      Int       @id(map: "state_pk") @default(autoincrement())
+  name    String    @db.VarChar
+  address address[]
+  city    city[]
+}
+
+model street {
+  id      Int       @id(map: "street_pk") @default(autoincrement())
+  cityId  Int
+  name    String    @db.VarChar
+  address address[]
+  city    city      @relation(fields: [cityId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "street_fk0")
+}
+
+model users {
+  id        Int        @id(map: "users_pk") @default(autoincrement())
+  name      String     @db.VarChar
+  email     String     @db.VarChar
+  password  String
+  phone     String     @db.VarChar(255)
+  addressId Int
+  image     String
+  favorits  favorits[]
+  games     games[]
+  address   address    @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_fk0")
+}
