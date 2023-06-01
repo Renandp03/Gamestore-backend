@@ -2,9 +2,10 @@
     "compilerOptions": {
       "outDir": "dist",
       "esModuleInterop": true,
-      "module": "es6",
+      "module": "ES6",
       "moduleResolution": "Node",
       "baseUrl": "src",
+      "paths": {"jquery": ["./vendor/jquery/dist/jquery"]}
     },
     "ts-node": {
       "esm": true
