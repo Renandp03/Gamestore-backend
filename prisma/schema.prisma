@@ -83,11 +83,11 @@ model street {
 model users {
   id        Int        @id(map: "users_pk") @default(autoincrement())
   name      String     @db.VarChar
-  email     String     @db.VarChar
+  email     String     @unique @db.VarChar
   password  String
   phone     String     @db.VarChar(255)
   addressId Int
-  image     String
+  image     String?
   favorits  favorits[]
   games     games[]
   address   address    @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_fk0")
