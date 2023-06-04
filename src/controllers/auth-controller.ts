@@ -11,3 +11,13 @@ export async function signUp(req:Request,res:Response, next:NextFunction){
         next(error);
     }
 }
+
+export async function signIn(req:Request,res:Response, next:NextFunction){
+    try {
+        const {email, password} = req.body;
+        const token = await authService.signIn(email,password);
+        res.status(httpStatus.OK).send(token);
+    } catch (error) {
+        next(error);
+    }
+}

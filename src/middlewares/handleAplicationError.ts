@@ -14,11 +14,30 @@ export function handleAplicationError(
             });
         }
 
-        if(err.name == 'userEmailAlreadyExist'){
+        if(err.name == 'Email already exist error.'){
             return res.status(httpStatus.CONFLICT).send({
                 name:err.name,
                 message:'This email can not be used.'
             });
         }
+
+        if(err.name == 'Bad request error.'){
+            return res.status(httpStatus.CONFLICT).send({
+                name:err.name,
+                message:'Bad request error.'
+            });
+        }
+
+        if(err.name == 'unauthorizedError'){
+            return res.status(httpStatus.CONFLICT).send({
+                name:err.name,
+                message:'Email or password is wrong.'
+            });
+        }
+
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            name:'Internal server error.',
+            message:'Internal server error.'
+        })
 
 }

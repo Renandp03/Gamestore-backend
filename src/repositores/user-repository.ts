@@ -22,7 +22,6 @@ async function findUserByEmail(email:string){
     })
 }
 
-
 async function createNewUser(newUserInfo:newUserInfo){
     return prisma.users.create({
         data:{
@@ -36,6 +35,28 @@ async function createNewUser(newUserInfo:newUserInfo){
     })
 }
 
+async function createNewSession(userId:number,token:string) {
+    const session = await prisma.sessions.findUnique({
+        where:{userId}
+    });
+
+    if(session){
+        return prisma.sessions.update({
+            where:{userId},
+            data:{token},
+            select:{token:true}
+        })
+    }
+    return await prisma.sessions.create({
+        data:{
+            userId,
+            token
+        },
+        select:{token:true}
+    })
+    
+}
+
 type newUserInfo = {
     name:string,
     email:string,
@@ -44,5 +65,5 @@ type newUserInfo = {
     phone:string,
     addressId:number
 }
-const userRepository = { findUsers, findUserByEmail, createNewUser };
+const userRepository = { findUsers, findUserByEmail, createNewUser, createNewSession };
 export default userRepository;

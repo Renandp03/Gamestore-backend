@@ -1,7 +1,11 @@
 import addressRepository from '../repositores/address-repository.js'
 import userRepository from '../repositores/user-repository.js';
 import bcrypt from 'bcrypt';
+import {v4 as uuid} from 'uuid'
 import userEmailAlreadyExistError from '../errors/user-email-already-exist-error.js'
+import notFoundError from '../errors/not-found-error.js';
+import badReqeustError from '../errors/bad-request-error.js'
+import unauthorizedError from '../errors/unauthorized-error.js'
 
 async function signUp(userInfo:userInfo) {
 
@@ -22,6 +26,25 @@ async function signUp(userInfo:userInfo) {
 
 }
 
+async function signIn(email:string,password:string) {
+
+    if(!email || !password) throw badReqeustError();
+
+    const user =  await userRepository.findUserByEmail(email);
+    if(!user) throw notFoundError();
+    
+    const confirmPassword = bcrypt.compareSync(password,user.password);
+    if(!confirmPassword) throw unauthorizedError();
+
+    const token = uuid();
+    const newSessionToken = await userRepository.createNewSession(user.id,token);
+
+    return(newSessionToken);
+
+
+  
+}
+
 type userInfo = {
     name: string,
     email:string,
@@ -33,6 +56,6 @@ type userInfo = {
     street:string
 }
 
-const authService = {signUp};
+const authService = {signUp, signIn};
 
 export default authService;
