@@ -37,9 +37,13 @@ async function signIn(email:string,password:string) {
     if(!confirmPassword) throw unauthorizedError();
 
     const token = uuid();
-    const newSessionToken = await userRepository.createNewSession(user.id,token);
-
-    return(newSessionToken);
+    const userSessionInfo = await userRepository.createNewSession(user.id,token);
+    const data = {
+        token:userSessionInfo.token,
+        name:userSessionInfo.users.name,
+        image:userSessionInfo.users.image
+    }
+    return(data);
 
 
   

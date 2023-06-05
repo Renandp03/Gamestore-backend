@@ -28,7 +28,7 @@ async function createNewUser(newUserInfo:newUserInfo){
             name:newUserInfo.name,
             email:newUserInfo.email,
             password:newUserInfo.password,
-            image:newUserInfo.password,
+            image:newUserInfo.image,
             phone:newUserInfo.phone,
             addressId:newUserInfo.addressId
         }
@@ -44,7 +44,15 @@ async function createNewSession(userId:number,token:string) {
         return prisma.sessions.update({
             where:{userId},
             data:{token},
-            select:{token:true}
+            select:{
+                token:true,
+                users:{
+                    select:{
+                        name:true,
+                        image:true
+                    }
+                }
+            }
         })
     }
     return await prisma.sessions.create({
@@ -52,7 +60,15 @@ async function createNewSession(userId:number,token:string) {
             userId,
             token
         },
-        select:{token:true}
+        select:{
+            token:true,
+            users:{
+                select:{
+                    name:true,
+                    image:true
+                }
+            }
+        }
     })
     
 }
