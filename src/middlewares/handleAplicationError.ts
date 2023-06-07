@@ -2,7 +2,7 @@ import { ErrorRequestHandler, Request, Response, NextFunction } from "express";
 import httpStatus from 'http-status';
 
 export function handleAplicationError(
-    err:ErrorRequestHandler,
+    err:HandleError,
     req:Request,
     res:Response,
     next:NextFunction){
@@ -10,28 +10,28 @@ export function handleAplicationError(
         if(err.name == 'notFound'){
             return res.status(httpStatus.NOT_FOUND).send({
                 name:err.name,
-                message:'No result for this search.'
+                message: err.message
             });
         }
 
         if(err.name == 'Email already exist error.'){
             return res.status(httpStatus.CONFLICT).send({
                 name:err.name,
-                message:'This email can not be used.'
+                message: err.message
             });
         }
 
         if(err.name == 'Bad request error.'){
-            return res.status(httpStatus.CONFLICT).send({
+            return res.status(httpStatus.BAD_REQUEST).send({
                 name:err.name,
-                message:'Bad request error.'
+                message: err.message
             });
         }
 
         if(err.name == 'unauthorizedError'){
-            return res.status(httpStatus.CONFLICT).send({
+            return res.status(httpStatus.UNAUTHORIZED).send({
                 name:err.name,
-                message:'Email or password is wrong.'
+                message: err.message
             });
         }
 
@@ -41,3 +41,5 @@ export function handleAplicationError(
         })
 
 }
+
+type HandleError = ErrorRequestHandler & {name:string,message:string}
