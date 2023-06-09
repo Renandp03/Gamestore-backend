@@ -7,7 +7,7 @@ import postGameSchema from "../schemas/postGame-schema.js";
 const gameRouter = Router();
 
 gameRouter
-  .get('/games/all',getAllGames)
+  .get('/games',getAllGames)
   .all('/*',authenticateToken)
   .get('/games/:ownerId',getGamesByOwnerId)
   .post('/games',validateSchema(postGameSchema), postGame);
