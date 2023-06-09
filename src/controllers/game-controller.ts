@@ -14,7 +14,7 @@ export async function getAllGames(req:Request,res:Response, next:NextFunction){
 
 export async function getGamesByOwnerId(req:AuthenticatedRequest,res:Response, next:NextFunction){
     try {
-        const ownerId = Number(req.params.id);
+        const ownerId = Number(req.params.ownerId);
         const games = await gameService.getGamesByOwnerId(ownerId);
         res.send(games);
 
