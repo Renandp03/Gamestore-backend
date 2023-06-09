@@ -8,6 +8,12 @@ async function getallgames() {
     return games;
 }
 
+async function getGamesByOwnerId(ownerId:number){
+    const games = await gameRepository.findByOwnerId(ownerId);
+    if(games.length == 0) throw notFoundError();
+    return games;
+}
+
 async function postGame(gameInfo:gameInput){
     const {name, image, userId, consoleId} = gameInfo;
     if(!name || !image || !userId || !consoleId) throw badRequestError();
@@ -23,5 +29,5 @@ export type gameInput = {
     consoleId:number
 }
 
-const gameService = {getallgames,postGame};
+const gameService = {getallgames,getGamesByOwnerId,postGame};
 export default gameService;

@@ -14,6 +14,21 @@ async function findAllGames() {
     })
 }
 
+async function findByOwnerId(ownerId:number) {
+    return prisma.games.findMany({
+        where:{
+            ownerId
+        },
+        include:{
+            users:{
+                select:{
+                    image:true
+                }
+            }
+        }
+    })
+}
+
 async function createGame(gameInfo:gameInput){
     return prisma.games.create({
         data:{
@@ -26,5 +41,5 @@ async function createGame(gameInfo:gameInput){
 }
 
 
-const gameRepository = {findAllGames, createGame};
+const gameRepository = {findAllGames, findByOwnerId, createGame};
 export default gameRepository;
