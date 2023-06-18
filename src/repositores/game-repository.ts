@@ -1,5 +1,4 @@
 import prisma from "../config/database.js";
-import {gameInput} from '../services/game-service.js'
 
 async function findAllGames() {
     return prisma.games.findMany({
@@ -34,6 +33,28 @@ async function findByOwnerId(ownerId:number) {
     })
 }
 
+async function findConsoleByName(name:string) {
+    return prisma.consoles.findFirst({
+        where:{
+            name
+        },
+        select:{
+            id:true
+        }
+    })
+}
+
+async function createConsole(name:string) {
+    return prisma.consoles.create({
+        data:{
+            name
+        },
+        select:{
+            id:true
+        }
+    })
+}
+
 async function createGame(gameInfo:gameInput){
     return prisma.games.create({
         data:{
@@ -45,6 +66,20 @@ async function createGame(gameInfo:gameInput){
     })
 }
 
+type gameInput = {
+    name:string,
+    image:string,
+    userId:number,
+    consoleId:number
+}
 
-const gameRepository = {findAllGames, findByGameId, findByOwnerId, createGame};
+
+const gameRepository = {
+    findAllGames, 
+    findByGameId, 
+    findByOwnerId, 
+    createGame, 
+    findConsoleByName,
+    createConsole
+};
 export default gameRepository;

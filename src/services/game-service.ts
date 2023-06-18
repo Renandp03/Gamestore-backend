@@ -14,19 +14,28 @@ async function getGamesByOwnerId(ownerId:number){
     return games;
 }
 
-async function postGame(gameInfo:gameInput){
-    const {name, image, userId, consoleId} = gameInfo;
-    if(!name || !image || !userId || !consoleId) throw badRequestError();
+async function postGame(gameInfo:gameInfo){
+    const {name, image, userId, consoleName} = gameInfo;
+    if(!name || !image || !userId || !consoleName) throw badRequestError();
+    
+    const consoleInfo = await gameRepository.findConsoleByName(consoleName); 
+    let consoleId;
+    if(!consoleInfo){
+        const newConsoleInfo = await gameRepository.createConsole(consoleName);
+        consoleId = newConsoleInfo.id;
+    }
+    else{consoleId = consoleInfo.id}
+    
 
-    const newGame = await gameRepository.createGame(gameInfo);
+    const newGame = await gameRepository.createGame({name,image,userId,consoleId});
     return newGame;
 }
 
-export type gameInput = {
+export type gameInfo = {
     name:string,
     image:string,
     userId:number,
-    consoleId:number
+    consoleName:string,
 }
 
 const gameService = {getallgames,getGamesByOwnerId,postGame};

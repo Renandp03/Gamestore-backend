@@ -48,6 +48,7 @@ async function createNewSession(userId:number,token:string) {
                 token:true,
                 users:{
                     select:{
+                        id:true,
                         name:true,
                         image:true
                     }
@@ -64,6 +65,7 @@ async function createNewSession(userId:number,token:string) {
             token:true,
             users:{
                 select:{
+                    id: true,
                     name:true,
                     image:true
                 }

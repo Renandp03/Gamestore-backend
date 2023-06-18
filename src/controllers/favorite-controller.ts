@@ -17,8 +17,8 @@ export async function postFavorite(req:AuthenticatedRequest,res:Response, next:N
 
 export async function getUserFavoriteGames(req:AuthenticatedRequest,res:Response, next:NextFunction){
     try {
-        const clientId  = Number(req.params.clientId);
-        const favorites = await favoriteService.getClientFavoritesGames(clientId);
+        const userId  = Number(req.params.userId);
+        const favorites = await favoriteService.getClientFavoritesGames(userId);
         res.send(favorites);
 
     } catch (error) {

@@ -25,9 +25,11 @@ export async function getGamesByOwnerId(req:AuthenticatedRequest,res:Response, n
 
 export async function postGame(req:AuthenticatedRequest,res:Response, next:NextFunction){
     try {
-        const {name, image, consoleId} = req.body;
+        const name = String(req.body.name);
+        const image = String(req.body.image);
+        const consoleName = String(req.body.consoleName);
         const userId = req.userId
-        const gameInfo = {name,image,userId,consoleId}
+        const gameInfo = {name,image,userId,consoleName}
         const game = await gameService.postGame(gameInfo);
         res.status(httpStatus.CREATED).send(game);
     } catch (error) {
