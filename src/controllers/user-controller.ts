@@ -9,3 +9,13 @@ export async function getUsers(req:Request,res:Response, next:NextFunction){
         next(error);
     }
 }
+
+export async function getUserById(req:Request,res:Response, next:NextFunction){
+    try {
+        const userId = Number(req.params.id);
+        const userInfo = await userService.getUserInfo(userId);
+        res.send(userInfo);
+    } catch (error) {
+        next(error);
+    }
+}

@@ -6,8 +6,7 @@ import { postFavorite, getUserFavoriteGames } from "../controllers/favorite-cont
 const favoritesRouter = Router();
 
 favoritesRouter
-  .all('/*',authenticateToken)
-  .get('/favorites/get/:userId', getUserFavoriteGames)
-  .post('/favorites/post/:gameId', postFavorite);
+  .get('/favorites/get/:userId', authenticateToken, getUserFavoriteGames)
+  .post('/favorites/post/:gameId', authenticateToken, postFavorite);
 
 export default favoritesRouter;

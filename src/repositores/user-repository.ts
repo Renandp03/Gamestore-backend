@@ -14,6 +14,42 @@ async function findUsers(){
     });
 }
 
+async function findUserById(id:number){
+    return prisma.users.findUnique({
+        where:{id},
+        select:{
+            id:true,
+            name:true,
+            email:true,
+            image:true,
+            games:{
+                select:{
+                    id:true,
+                    name:true,
+                    image:true,
+                    consoles:{
+                        select:{
+                            name:true
+                        }
+                    }
+                },
+            },
+            phone:true,
+            favorits:true,
+            address:{
+                select:{
+                    city:{
+                        select:{
+                            name:true
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
 async function findUserByEmail(email:string){
     return prisma.users.findUnique({
         where:{
@@ -83,5 +119,5 @@ type newUserInfo = {
     phone:string,
     addressId:number
 }
-const userRepository = { findUsers, findUserByEmail, createNewUser, createNewSession };
+const userRepository = { findUsers, findUserById,findUserByEmail, createNewUser, createNewSession };
 export default userRepository;

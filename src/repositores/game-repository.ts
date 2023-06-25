@@ -8,6 +8,11 @@ async function findAllGames() {
                     id:true,
                     image:true
                 }
+            },
+            consoles:{
+                select:{
+                    name:true
+                }
             }
         }
     })
@@ -27,6 +32,11 @@ async function findByOwnerId(ownerId:number) {
             users:{
                 select:{
                     image:true
+                }
+            },
+            consoles:{
+                select:{
+                    name:true
                 }
             }
         }

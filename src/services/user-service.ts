@@ -8,5 +8,12 @@ async function getUsers(){
     return users;
 }
 
-const userService = { getUsers };
+async function getUserInfo(userId:number){
+    const userInfo = await userRepository.findUserById(userId);
+    if(!userInfo) throw notFoundError();
+
+    return userInfo;
+}
+
+const userService = { getUsers,getUserInfo };
 export default userService;
