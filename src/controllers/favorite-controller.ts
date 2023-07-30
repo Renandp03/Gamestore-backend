@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../middlewares/authToken.js";
 import favoriteService from "../services/favorite-service.js";
 import httpStatus from "http-status";

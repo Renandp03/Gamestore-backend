@@ -12,6 +12,17 @@ export async function getAllGames(req:Request,res:Response, next:NextFunction){
     }
 }
 
+export async function getGameById(req:Request,res:Response, next:NextFunction) {
+    try {
+        const gameId = Number(req.params.gameId);
+        const game = await gameService.getGameById(gameId);
+        res.send(game);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
 export async function getGamesByOwnerId(req:AuthenticatedRequest,res:Response, next:NextFunction){
     try {
         const ownerId = Number(req.params.ownerId);

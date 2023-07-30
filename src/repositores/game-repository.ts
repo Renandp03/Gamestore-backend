@@ -19,7 +19,12 @@ async function findAllGames() {
 }
 async function findByGameId(id:number) {
     return prisma.games.findUnique({
-        where:{id}
+        where:{id},
+        include:{
+            consoles:{
+                select:{name:true}
+            }
+        }
     })
 }
 

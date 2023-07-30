@@ -8,6 +8,13 @@ async function getallgames() {
     return games;
 }
 
+async function getGameById(gameId:number) {
+    const game = await gameRepository.findByGameId(gameId);
+    if(!game) throw notFoundError;
+
+    return game;
+}
+
 async function getGamesByOwnerId(ownerId:number){
     const games = await gameRepository.findByOwnerId(ownerId);
     if(games.length == 0) throw notFoundError();
@@ -38,5 +45,5 @@ export type gameInfo = {
     consoleName:string,
 }
 
-const gameService = {getallgames,getGamesByOwnerId,postGame};
+const gameService = {getallgames,getGameById,getGamesByOwnerId,postGame};
 export default gameService;

@@ -1,6 +1,6 @@
 export default function badRequestError(){
     return {
-        name:'Bad request error.',
+        name:'badRequestError',
         message:'Bad request.',
     }
 }
