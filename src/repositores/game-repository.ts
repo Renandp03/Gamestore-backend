@@ -23,7 +23,8 @@ async function findByGameId(id:number) {
         include:{
             consoles:{
                 select:{name:true}
-            }
+            },
+            users:{select:{name:true}}
         }
     })
 }

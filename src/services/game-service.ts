@@ -1,3 +1,4 @@
+import { platform } from 'os';
 import badRequestError from '../errors/bad-request-error.js';
 import notFoundError from '../errors/not-found-error.js';
 import gameRepository from '../repositores/game-repository.js'
@@ -11,8 +12,11 @@ async function getallgames() {
 async function getGameById(gameId:number) {
     const game = await gameRepository.findByGameId(gameId);
     if(!game) throw notFoundError;
+    const {id, ownerId, consoleId, name, image} = game;
+    const platform = game.consoles.name;
+    const owner = game.users.name;
 
-    return game;
+    return {id,ownerId,owner,consoleId,name,image,platform};
 }
 
 async function getGamesByOwnerId(ownerId:number){
