@@ -15,7 +15,7 @@ model address {
   street   street  @relation(fields: [streetId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "address_fk0")
   city     city    @relation(fields: [cityId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "address_fk1")
   state    state   @relation(fields: [stateId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "address_fk2")
-  users    users[]
+  users    user[]
 }
 
 model city {
@@ -27,10 +27,10 @@ model city {
   street  street[]
 }
 
-model consoles {
+model platform {
   id    Int     @id(map: "consoles_pk") @default(autoincrement())
   name  String  @unique @db.VarChar
-  games games[]
+  games game[]
 }
 
 model exchanges {
@@ -40,19 +40,19 @@ model exchanges {
   status                               String
   createdAt                            DateTime @db.Timestamp(6)
   updatedAt                            DateTime @db.Timestamp(6)
-  games_exchanges_desiredGameIdTogames games    @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
-  games_exchanges_offeredGameIdTogames games    @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
+  games_exchanges_desiredGameIdTogames game    @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
+  games_exchanges_offeredGameIdTogames game    @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
 }
 
-model favorits {
+model favorite {
   id     Int   @id(map: "favorits_pk") @default(autoincrement())
   userId Int
   gameId Int
-  users  users @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorits_fk0")
-  games  games @relation(fields: [gameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorits_fk1")
+  users  user @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorits_fk0")
+  games  game @relation(fields: [gameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "favorits_fk1")
 }
 
-model games {
+model game {
   id                                       Int         @id(map: "games_pk") @default(autoincrement())
   ownerId                                  Int
   consoleId                                Int
@@ -60,9 +60,9 @@ model games {
   image                                    String
   exchanges_exchanges_desiredGameIdTogames exchanges[] @relation("exchanges_desiredGameIdTogames")
   exchanges_exchanges_offeredGameIdTogames exchanges[] @relation("exchanges_offeredGameIdTogames")
-  favorits                                 favorits[]
-  users                                    users       @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk0")
-  consoles                                 consoles    @relation(fields: [consoleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk1")
+  favorits                                 favorite[]
+  owner                                    user       @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk0")
+  platform                                 platform    @relation(fields: [consoleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk1")
 }
 
 model state {
@@ -80,14 +80,14 @@ model street {
   city    city      @relation(fields: [cityId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "street_fk0")
 }
 
-model sessions {
+model session {
   id      Int       @id(map: "sessions_pk") @default(autoincrement())
   userId  Int       @unique
   token   String
-  users   users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_fk0")
+  user   user       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_fk0")
 }
 
-model users {
+model user {
   id        Int        @id(map: "users_pk") @default(autoincrement())
   name      String     @db.VarChar
   email     String     @unique @db.VarChar
@@ -95,8 +95,8 @@ model users {
   phone     String     @db.VarChar(255)
   addressId Int
   image     String?
-  favorits  favorits[]
-  games     games[]
-  sessions  sessions[]
+  favorites  favorite[]
+  games     game[]
+  session  session?
   address   address    @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_fk0")
 }

@@ -1,15 +1,16 @@
+import { platform } from "os";
 import prisma from "../config/database.js";
 
 async function findAllGames() {
-    return prisma.games.findMany({
+    return prisma.game.findMany({
         include:{
-            users:{
+            owner:{
                 select:{
                     id:true,
                     image:true
                 }
             },
-            consoles:{
+            platform:{
                 select:{
                     name:true
                 }
@@ -17,30 +18,31 @@ async function findAllGames() {
         }
     })
 }
-async function findByGameId(id:number) {
-    return prisma.games.findUnique({
+async function findByGameId(id:number) : Promise<gameResponse> {
+    return prisma.game.findUnique({
         where:{id},
-        include:{
-            consoles:{
-                select:{name:true}
-            },
-            users:{select:{name:true}}
+        select:{
+            id:true,
+            name:true,
+            image:true,
+            owner:{select:{id:true, name:true, image:true}},
+            platform:{select:{id:true,name:true}}
         }
     })
 }
 
 async function findByOwnerId(ownerId:number) {
-    return prisma.games.findMany({
+    return prisma.game.findMany({
         where:{
             ownerId
         },
         include:{
-            users:{
+            owner:{
                 select:{
                     image:true
                 }
             },
-            consoles:{
+            platform:{
                 select:{
                     name:true
                 }
@@ -50,7 +52,7 @@ async function findByOwnerId(ownerId:number) {
 }
 
 async function findConsoleByName(name:string) {
-    return prisma.consoles.findFirst({
+    return prisma.platform.findFirst({
         where:{
             name
         },
@@ -61,7 +63,7 @@ async function findConsoleByName(name:string) {
 }
 
 async function createConsole(name:string) {
-    return prisma.consoles.create({
+    return prisma.platform.create({
         data:{
             name
         },
@@ -72,7 +74,7 @@ async function createConsole(name:string) {
 }
 
 async function createGame(gameInfo:gameInput){
-    return prisma.games.create({
+    return prisma.game.create({
         data:{
             name:gameInfo.name,
             image:gameInfo.image,
@@ -80,6 +82,14 @@ async function createGame(gameInfo:gameInput){
             consoleId:gameInfo.consoleId
         }
     })
+}
+
+type gameResponse = {
+    id: number,
+    name:string,
+    image:string,
+    platform:{id:number,name:string},
+    owner:{id:number,name:string,image:string}
 }
 
 type gameInput = {

@@ -1,7 +1,7 @@
 import prisma from '../config/database.js';
 
 async function findFavorite(userId:number, gameId:number) {
-    return prisma.favorits.findFirst({
+    return prisma.favorite.findFirst({
         where:{
             userId,
             gameId
@@ -10,7 +10,7 @@ async function findFavorite(userId:number, gameId:number) {
 };
 
 async function createFavorite(userId:number, gameId:number) {
-    return prisma.favorits.create({
+    return prisma.favorite.create({
         data:{
             userId,
             gameId
@@ -19,7 +19,7 @@ async function createFavorite(userId:number, gameId:number) {
 };
 
 async function deleteFavorite(userId:number, gameId:number) {
-    return prisma.favorits.deleteMany({
+    return prisma.favorite.deleteMany({
         where:{
             gameId,
             userId
@@ -28,7 +28,7 @@ async function deleteFavorite(userId:number, gameId:number) {
 };
 
 async function findFavoriteGamesByUserId(userId:number) {
-    return prisma.favorits.findMany({
+    return prisma.favorite.findMany({
         where:{
             userId
         },

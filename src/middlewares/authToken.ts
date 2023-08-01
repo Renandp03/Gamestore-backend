@@ -22,7 +22,7 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
 }
 
 async function findSessionByToken(token:string){
-    return prisma.sessions.findFirst({
+    return prisma.session.findFirst({
         where:{
             token
         }

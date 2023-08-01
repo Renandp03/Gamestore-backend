@@ -12,11 +12,8 @@ async function getallgames() {
 async function getGameById(gameId:number) {
     const game = await gameRepository.findByGameId(gameId);
     if(!game) throw notFoundError;
-    const {id, ownerId, consoleId, name, image} = game;
-    const platform = game.consoles.name;
-    const owner = game.users.name;
 
-    return {id,ownerId,owner,consoleId,name,image,platform};
+    return game;
 }
 
 async function getGamesByOwnerId(ownerId:number){

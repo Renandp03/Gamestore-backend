@@ -18,7 +18,7 @@ CREATE TABLE "city" (
 );
 
 -- CreateTable
-CREATE TABLE "consoles" (
+CREATE TABLE "platform" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
 
@@ -38,7 +38,7 @@ CREATE TABLE "exchanges" (
 );
 
 -- CreateTable
-CREATE TABLE "favorits" (
+CREATE TABLE "favorite" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "gameId" INTEGER NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE "favorits" (
 );
 
 -- CreateTable
-CREATE TABLE "games" (
+CREATE TABLE "game" (
     "id" SERIAL NOT NULL,
     "ownerId" INTEGER NOT NULL,
     "consoleId" INTEGER NOT NULL,
@@ -75,7 +75,16 @@ CREATE TABLE "street" (
 );
 
 -- CreateTable
-CREATE TABLE "users" (
+CREATE TABLE "session" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "token" TEXT NOT NULL,
+
+    CONSTRAINT "sessions_pk" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
     "email" VARCHAR NOT NULL,
@@ -88,7 +97,13 @@ CREATE TABLE "users" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "consoles_name_key" ON "consoles"("name");
+CREATE UNIQUE INDEX "platform_name_key" ON "platform"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "session_userId_key" ON "session"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- AddForeignKey
 ALTER TABLE "address" ADD CONSTRAINT "address_fk0" FOREIGN KEY ("streetId") REFERENCES "street"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -103,25 +118,28 @@ ALTER TABLE "address" ADD CONSTRAINT "address_fk2" FOREIGN KEY ("stateId") REFER
 ALTER TABLE "city" ADD CONSTRAINT "city_fk0" FOREIGN KEY ("stateId") REFERENCES "state"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "exchanges" ADD CONSTRAINT "exchanges_fk0" FOREIGN KEY ("desiredGameId") REFERENCES "games"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "exchanges" ADD CONSTRAINT "exchanges_fk0" FOREIGN KEY ("desiredGameId") REFERENCES "game"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "exchanges" ADD CONSTRAINT "exchanges_fk1" FOREIGN KEY ("offeredGameId") REFERENCES "games"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "exchanges" ADD CONSTRAINT "exchanges_fk1" FOREIGN KEY ("offeredGameId") REFERENCES "game"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "favorits" ADD CONSTRAINT "favorits_fk0" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "favorite" ADD CONSTRAINT "favorits_fk0" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "favorits" ADD CONSTRAINT "favorits_fk1" FOREIGN KEY ("gameId") REFERENCES "games"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "favorite" ADD CONSTRAINT "favorits_fk1" FOREIGN KEY ("gameId") REFERENCES "game"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "games" ADD CONSTRAINT "games_fk0" FOREIGN KEY ("ownerId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "game" ADD CONSTRAINT "games_fk0" FOREIGN KEY ("ownerId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "games" ADD CONSTRAINT "games_fk1" FOREIGN KEY ("consoleId") REFERENCES "consoles"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "game" ADD CONSTRAINT "games_fk1" FOREIGN KEY ("consoleId") REFERENCES "platform"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "street" ADD CONSTRAINT "street_fk0" FOREIGN KEY ("cityId") REFERENCES "city"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("addressId") REFERENCES "address"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "session" ADD CONSTRAINT "sessions_fk0" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "user" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("addressId") REFERENCES "address"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

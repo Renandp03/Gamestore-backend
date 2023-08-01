@@ -40,9 +40,9 @@ async function signIn(email:string,password:string) {
     const userSessionInfo = await userRepository.createNewSession(user.id,token);
     const data = {
         token:userSessionInfo.token,
-        userId:userSessionInfo.users.id,
-        name:userSessionInfo.users.name,
-        image:userSessionInfo.users.image,
+        userId:userSessionInfo.user.id,
+        name:userSessionInfo.user.name,
+        image:userSessionInfo.user.image,
     }
     return(data);
 

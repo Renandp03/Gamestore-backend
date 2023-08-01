@@ -6,7 +6,7 @@ import gameRepository from '../repositores/game-repository.js';
 async function postFavorite(userId:number,gameId:number) {
     const game = await gameRepository.findByGameId(gameId);
     if(!game) throw notFoundError();
-    if(game.ownerId == userId) throw badRequestError();
+    if(game.owner.id == userId) throw badRequestError();
 
     const favorite = await favoriteRepository.findFavorite(userId,gameId);
     if(favorite){
