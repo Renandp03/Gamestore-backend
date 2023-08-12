@@ -22,7 +22,17 @@ async function signUp(userInfo:userInfo) {
     const hashPassword = bcrypt.hashSync(password,10);
     const newInfos = {name,email,password:hashPassword,phone,image,addressId:address.id};
     const newUser = await userRepository.createNewUser(newInfos);
-    return newUser;
+
+    const token = uuid();
+    const userSessionInfo = await userRepository.createNewSession(newUser.id,token);
+    const data = {
+        token:userSessionInfo.token,
+        userId:userSessionInfo.user.id,
+        name:userSessionInfo.user.name,
+        image:userSessionInfo.user.image,
+    }
+
+    return data;
 
 }
 
