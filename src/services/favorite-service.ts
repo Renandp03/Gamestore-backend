@@ -20,7 +20,6 @@ async function postFavorite(userId:number,gameId:number) {
 
 async function getClientFavoritesGames(userId:number) {
     const games = await favoriteRepository.findFavoriteGamesByUserId(userId);
-    if(games.length == 0) throw notFoundError();
     return games;
 }
 

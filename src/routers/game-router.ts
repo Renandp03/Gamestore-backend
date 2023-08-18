@@ -9,7 +9,7 @@ const gameRouter = Router();
 gameRouter
   .get('/games',getAllGames)
   .get('/games/:gameId', getGameById)
-  .get('/games/:ownerId', authenticateToken, getGamesByOwnerId)
+  .get('/games/byUser/:ownerId', authenticateToken, getGamesByOwnerId)
   .post('/games', authenticateToken, validateSchema(postGameSchema), postGame);
 
 export default gameRouter;
