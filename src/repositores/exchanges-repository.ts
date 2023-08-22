@@ -13,11 +13,18 @@ async function createExchange(exchangeImput:exchangeImput){
     })
 }
 
+async function updateExchange(exchangeId:number,status:string) {
+    return prisma.exchanges.update({
+        where:{id:exchangeId},
+        data:{status}
+    })
+}
+
 export type exchangeImput = {
     desiredGameId: number,
     offeredGameId: number,
 }
 
-const exchangeRepository = {findAllExchanges,createExchange};
+const exchangeRepository = {findAllExchanges,createExchange,updateExchange};
 
 export default exchangeRepository;
