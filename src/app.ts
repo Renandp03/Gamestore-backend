@@ -16,7 +16,7 @@ app.use(userRouter);
 app.use(gameRouter);
 app.use(favoritesRouter);
 app.use(authRouter);
-app.use(exchangeRouter);
+app.use('/exchange',exchangeRouter);
 
 app.use(handleAplicationError);
 

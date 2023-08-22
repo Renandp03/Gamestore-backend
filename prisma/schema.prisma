@@ -34,14 +34,14 @@ model platform {
 }
 
 model exchanges {
-  id                                   Int      @id(map: "exchanges_pk") @default(autoincrement())
+  id                                   Int        @id(map: "exchanges_pk") @default(autoincrement())
   desiredGameId                        Int
   offeredGameId                        Int
-  status                               String
-  createdAt                            DateTime @db.Timestamp(6)
-  updatedAt                            DateTime @db.Timestamp(6)
-  games_exchanges_desiredGameIdTogames game    @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
-  games_exchanges_offeredGameIdTogames game    @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
+  status                               String     @default("REQUIRED")
+  createdAt                            DateTime   @db.Timestamp(6)  @default(now())
+  updatedAt                            DateTime   @db.Timestamp(6)  @default(now())
+  games_exchanges_desiredGameIdTogames game       @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
+  games_exchanges_offeredGameIdTogames game       @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
 }
 
 model favorite {

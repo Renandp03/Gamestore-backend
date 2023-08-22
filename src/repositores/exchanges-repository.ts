@@ -4,6 +4,20 @@ async function findAllExchanges() {
     return prisma.exchanges.findMany({});
 }
 
-const exchangeRepository = {findAllExchanges};
+async function createExchange(exchangeImput:exchangeImput){
+    return prisma.exchanges.create({
+        data:{
+            desiredGameId:exchangeImput.desiredGameId,
+            offeredGameId:exchangeImput.offeredGameId,
+        }
+    })
+}
+
+export type exchangeImput = {
+    desiredGameId: number,
+    offeredGameId: number,
+}
+
+const exchangeRepository = {findAllExchanges,createExchange};
 
 export default exchangeRepository;
