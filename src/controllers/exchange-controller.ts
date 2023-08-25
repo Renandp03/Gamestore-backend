@@ -23,3 +23,17 @@ export async function postExchange(req:AuthenticatedRequest,res:Response,next:Ne
         next(error);
     }
 }
+
+export async function updateExchange(req:AuthenticatedRequest,res:Response,next:NextFunction) {
+    try {
+        const userId = req.userId;
+        const exchangeId = req.body.exchangeId;
+        const newStatus = req.body.newStatus;
+        await exchangeService.updateExchange(userId,exchangeId,newStatus);
+        res.sendStatus(200);
+        
+    } catch (error) {
+        console.log(error.name)
+        next(error);
+    }
+}

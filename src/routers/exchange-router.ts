@@ -1,14 +1,16 @@
 import { Router } from "express";
-import { getExchange, postExchange } from "../controllers/exchange-controller.js";
+import { getExchange, postExchange, updateExchange } from "../controllers/exchange-controller.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
 import { authenticateToken } from "../middlewares/authToken.js";
-import exchangeSchema from "../schemas/exchange-schema.js";
+import exchangeImputSchema from "../schemas/exchange-Imput-schema.js";
+import exchangeUpdateSchema from "../schemas/exchange-update-schema.js";
 
 const exchangeRouter = Router();
 
 exchangeRouter
   .get('/', getExchange)
   .all('/*', authenticateToken)
-  .post('/', validateSchema(exchangeSchema),postExchange)
+  .post('/', validateSchema(exchangeImputSchema),postExchange)
+  .put('/', validateSchema(exchangeUpdateSchema),updateExchange)
 
 export default exchangeRouter;
