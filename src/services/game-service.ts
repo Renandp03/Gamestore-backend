@@ -11,7 +11,7 @@ async function getallgames() {
 
 async function getGameById(gameId:number) {
     const game = await gameRepository.findByGameId(gameId);
-    if(!game) throw notFoundError;
+    if(!game) throw notFoundError('O jogo selecionado não foi encontrado.');
 
     return game;
 }

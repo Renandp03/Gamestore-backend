@@ -1,6 +1,6 @@
-export default function badRequestError(){
+export default function badRequestError(message?:string){
     return {
         name:'badRequestError',
-        message:'Bad request.',
+        message: message || 'Bad request.',
     }
 }

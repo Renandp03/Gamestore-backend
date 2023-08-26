@@ -1,6 +1,6 @@
-export default function unauthorizedError(){
+export default function unauthorizedError(message?:string){
     return {
         name:'unauthorizedError',
-        message:'unauthorizedError',
+        message: message || 'unauthorizedError',
     }
 }

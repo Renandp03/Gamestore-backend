@@ -1,6 +1,6 @@
-export default function notFoundError(){
+export default function notFoundError(message?:string){
     return {
         name:'notFound',
-        message:'No results for this search.',
+        message: message ||'No results for this search.',
     }
 }
