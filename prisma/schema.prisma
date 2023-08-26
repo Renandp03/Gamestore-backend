@@ -40,8 +40,8 @@ model exchanges {
   status                               String     @default("REQUIRED")
   createdAt                            DateTime   @db.Timestamp(6)  @default(now())
   updatedAt                            DateTime   @db.Timestamp(6)  @default(now())
-  games_exchanges_desiredGameIdTogames game       @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
-  games_exchanges_offeredGameIdTogames game       @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
+  desiredGame                          game       @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
+  offeredGame                          game       @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
 }
 
 model favorite {

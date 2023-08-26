@@ -1,11 +1,17 @@
 import prisma from "../config/database.js";
 
-async function findAllExchanges() {
+async function findAllExchanges() : Promise<exchange[]> {
     return prisma.exchanges.findMany({});
 }
 
 async function findExchangeById(id:number) {
-    return prisma.exchanges.findUnique({where:{id}});
+    return prisma.exchanges.findUnique({
+        where:{id},
+        include:{
+            desiredGame:{select:{owner:{select:{id:true,name:true,image:true}}}},
+            offeredGame:{select:{owner:{select:{id:true,name:true,image:true}}}}
+        }
+    });
 }
 
 async function createExchange(exchangeImput:exchangeImput){
@@ -13,7 +19,7 @@ async function createExchange(exchangeImput:exchangeImput){
         data:{
             desiredGameId:exchangeImput.desiredGameId,
             offeredGameId:exchangeImput.offeredGameId,
-        }
+        },
     })
 }
 
@@ -27,6 +33,15 @@ async function updateExchange(exchangeId:number,status:string) {
 export type exchangeImput = {
     desiredGameId: number,
     offeredGameId: number,
+}
+
+export type exchange = {
+    id: number,
+    desiredGameId: number,
+    offeredGameId:number,
+    status: string,
+    createdAt: object,
+    updatedAt: object
 }
 
 const exchangeRepository = {

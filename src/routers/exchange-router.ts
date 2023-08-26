@@ -9,6 +9,7 @@ const exchangeRouter = Router();
 
 exchangeRouter
   .get('/', getExchange)
+  .get('/:id',)
   .all('/*', authenticateToken)
   .post('/', validateSchema(exchangeImputSchema),postExchange)
   .put('/', validateSchema(exchangeUpdateSchema),updateExchange)
