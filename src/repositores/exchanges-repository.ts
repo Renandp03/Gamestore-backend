@@ -14,13 +14,13 @@ async function findExchangeById(id:number) {
     });
 }
 
-async function findExchangesByUserId(id:number) {
+async function findExchangesByUserId(id:number) : Promise<exchange[]> {
     return prisma.exchanges.findMany({
         where:{
-            OR:{
-                desiredGame:{owner:{id}},
-                offeredGame:{owner:{id}},
-            }
+            OR:[
+                {desiredGame:{owner:{id}}},
+                {offeredGame:{owner:{id}}},
+            ]
         }
     })
 }
