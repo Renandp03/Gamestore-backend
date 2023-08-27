@@ -13,6 +13,10 @@ async function getExchangeById(id:number) : Promise <exchange>{
     const exchange = exchangeRepository.findExchangeById(id);
     return exchange;
 }
+async function getExchangesByUser(userId:number) : Promise <exchange[]>{
+    const exchanges = await exchangeRepository.findExchangesByUserId(userId);
+    return exchanges;
+}
 async function postExchange(userId:number,exchangeImput: exchangeImput) : Promise <exchange>{
     const game = await gameRepository.findByGameId(exchangeImput.offeredGameId);
     if(game.owner.id !== userId) throw unauthorizedError();
@@ -36,6 +40,7 @@ async function deleteExchange(exchangeId:number, userId:number){
 }
 const exchangeService = {
     getExchanges,
+    getExchangesByUser,
     postExchange,
     updateExchange,
     getExchangeById,

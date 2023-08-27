@@ -14,6 +14,17 @@ async function findExchangeById(id:number) {
     });
 }
 
+async function findExchangesByUserId(id:number) {
+    return prisma.exchanges.findMany({
+        where:{
+            OR:{
+                desiredGame:{owner:{id}},
+                offeredGame:{owner:{id}},
+            }
+        }
+    })
+}
+
 async function createExchange(exchangeImput:exchangeImput){
     return prisma.exchanges.create({
         data:{
@@ -53,7 +64,8 @@ const exchangeRepository = {
     createExchange,
     updateExchange,
     findExchangeById,
-    deleteExchange
+    deleteExchange,
+    findExchangesByUserId
 };
 
 export default exchangeRepository;

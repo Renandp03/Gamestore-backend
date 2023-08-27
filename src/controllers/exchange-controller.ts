@@ -2,12 +2,23 @@ import { Request, Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../middlewares/authToken.js";
 import exchangeService from "../services/exchange-service.js";
 
-export async function getExchange(req:Request,res:Response,next:NextFunction) {
+export async function getExchanges(req:Request,res:Response,next:NextFunction) {
     try {
         const exchanges = await exchangeService.getExchanges()
         res.send(exchanges);    
     } catch (error) {
         console.log(error)
+        next(error);
+    }
+}
+
+export async function getExchangesByUser(req:AuthenticatedRequest,res:Response,next:NextFunction) {
+    try {
+        const userId = req.userId;
+        const exchanges = await exchangeService.getExchangesByUser(userId);
+        res.send(exchanges);
+    } catch (error) {
+        console.log(error);
         next(error);
     }
 }

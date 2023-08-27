@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getExchange, postExchange, updateExchange, deleteExchange } from "../controllers/exchange-controller.js";
+import { getExchanges,getExchangesByUser, postExchange, updateExchange, deleteExchange } from "../controllers/exchange-controller.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
 import { authenticateToken } from "../middlewares/authToken.js";
 import {exchangeImputSchema,exchangeUpdateSchema, deleteExchangeSchema} from "../schemas/exchange-Imput-schema.js";
@@ -7,9 +7,8 @@ import {exchangeImputSchema,exchangeUpdateSchema, deleteExchangeSchema} from "..
 const exchangeRouter = Router();
 
 exchangeRouter
-  .get('/', getExchange)
-  .get('/:id',)
   .all('/*', authenticateToken)
+  .get('/', getExchangesByUser)
   .post('/', validateSchema(exchangeImputSchema),postExchange)
   .put('/', validateSchema(exchangeUpdateSchema),updateExchange)
   .delete('/',validateSchema(deleteExchangeSchema), deleteExchange);
