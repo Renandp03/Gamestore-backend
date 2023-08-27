@@ -37,3 +37,16 @@ export async function updateExchange(req:AuthenticatedRequest,res:Response,next:
         next(error);
     }
 }
+
+export async function deleteExchange(req:AuthenticatedRequest,res:Response,next:NextFunction) {
+    try {
+        const userId = req.userId;
+        const exchangeId = req.body.exchangeId;
+        await exchangeService.deleteExchange(exchangeId, userId);
+        res.sendStatus(204);
+        
+    } catch (error) {
+        console.log(error.name)
+        next(error);
+    }
+}
