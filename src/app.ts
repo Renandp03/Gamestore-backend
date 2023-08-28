@@ -12,9 +12,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(userRouter);
-app.use(gameRouter);
-app.use(favoritesRouter);
+app.use('/users',userRouter);
+app.use('/games',gameRouter);
+app.use('/favorites',favoritesRouter);
 app.use(authRouter);
 app.use('/exchange',exchangeRouter);
 

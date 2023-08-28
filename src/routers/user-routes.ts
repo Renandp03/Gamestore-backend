@@ -5,7 +5,7 @@ import { authenticateToken } from "../middlewares/authToken.js";
 const userRouter = Router();
 
 userRouter
-  .get('/users',authenticateToken, getUsers)
-  .get('/users/:id',authenticateToken, getUserById)
+  .get('/',authenticateToken, getUsers)
+  .get('/:id',authenticateToken, getUserById)
 
 export default userRouter;

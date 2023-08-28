@@ -1,4 +1,3 @@
-import { platform } from "os";
 import prisma from "../config/database.js";
 
 async function findAllGames() {
@@ -84,6 +83,10 @@ async function createGame(gameInfo:gameInput){
     })
 }
 
+async function deleteGame(id:number) {
+    return prisma.game.delete({where:{id}});
+}
+
 type gameResponse = {
     id: number,
     name:string,
@@ -99,13 +102,13 @@ type gameInput = {
     consoleId:number
 }
 
-
 const gameRepository = {
     findAllGames, 
     findByGameId, 
     findByOwnerId, 
     createGame, 
     findConsoleByName,
-    createConsole
+    createConsole,
+    deleteGame
 };
 export default gameRepository;

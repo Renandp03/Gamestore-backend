@@ -48,3 +48,14 @@ export async function postGame(req:AuthenticatedRequest,res:Response, next:NextF
     }
 }
 
+export async function deleteGame(req:AuthenticatedRequest,res:Response, next:NextFunction) {
+    try {
+        const userId = req.userId;
+        const gameId = req.body.gameId;
+        await gameService.deleteGame(userId,gameId);
+        res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+}
+

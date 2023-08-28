@@ -1,3 +1,4 @@
+import unauthorizedError from '../errors/unauthorized-error.js';
 import badRequestError from '../errors/bad-request-error.js';
 import notFoundError from '../errors/not-found-error.js';
 import gameRepository from '../repositores/game-repository.js'
@@ -38,6 +39,13 @@ async function postGame(gameInfo:gameInfo){
     return newGame;
 }
 
+async function deleteGame(userId:number, gameId:number) {
+    const game = await gameRepository.findByGameId(gameId);
+    if(!game) throw notFoundError('Jogo não encontrado.');
+    if(game.owner.id !== userId) throw unauthorizedError('Só o proprietario pode deletar esse jogo.');
+    await gameRepository.deleteGame(gameId);
+}
+
 export type gameInfo = {
     name:string,
     image:string,
@@ -45,5 +53,5 @@ export type gameInfo = {
     consoleName:string,
 }
 
-const gameService = {getallgames,getGameById,getGamesByOwnerId,postGame};
+const gameService = {getallgames,getGameById,getGamesByOwnerId,postGame,deleteGame};
 export default gameService;
