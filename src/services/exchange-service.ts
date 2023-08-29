@@ -4,6 +4,7 @@ import exchangeRepository, { exchangeImput } from '../repositores/exchanges-repo
 import unauthorizedError from '../errors/unauthorized-error.js';
 import notFoundError from '../errors/not-found-error.js';
 import {exchange} from '../repositores/exchanges-repository.js';
+import notificationRepository from '../repositores/notification-repository.js'
 
 async function getExchanges() : Promise <exchange[]>{
     const exchanges = await exchangeRepository.findAllExchanges();
