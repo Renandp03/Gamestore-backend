@@ -45,6 +45,20 @@ async function deleteExchange(id:number) {
     return prisma.exchanges.delete({where:{id}});
 }
 
+async function deleteExchangesByGameId(id:number) {
+    return prisma.exchanges.deleteMany({
+        where:{
+            OR:[
+                {desiredGame:{id}},
+                {offeredGame:{id}}
+            ],
+            AND:[
+                {status:'REQUIRED'},
+            ]
+        }
+    });
+}
+
 export type exchangeImput = {
     desiredGameId: number,
     offeredGameId: number,
@@ -65,7 +79,8 @@ const exchangeRepository = {
     updateExchange,
     findExchangeById,
     deleteExchange,
-    findExchangesByUserId
+    findExchangesByUserId,
+    deleteExchangesByGameId
 };
 
 export default exchangeRepository;
