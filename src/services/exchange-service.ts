@@ -19,21 +19,32 @@ async function getExchangesByUser(userId:number) : Promise <exchange[]>{
     return exchanges;
 }
 async function postExchange(userId:number,exchangeImput: exchangeImput) : Promise <exchange>{
-    const game = await gameRepository.findByGameId(exchangeImput.offeredGameId);
-    if(game.owner.id !== userId) throw unauthorizedError();
+    const gameOfered = await gameRepository.findByGameId(exchangeImput.offeredGameId);
+    if(gameOfered.owner.id !== userId) throw unauthorizedError();
+
+    const gameDeserved = await gameRepository.findByGameId(exchangeImput.desiredGameId);
+    if(gameDeserved.owner.id === userId) throw badRequestError();
+
     if(!exchangeImput.desiredGameId || !exchangeImput.offeredGameId) throw badRequestError();
     if(exchangeImput.desiredGameId === exchangeImput.offeredGameId) throw badRequestError();
+
     const newExchange = await exchangeRepository.createExchange(exchangeImput);
+
     const {offeredGame,desiredGame} = newExchange;
-    const message = `${offeredGame.owner.name} está oferecendo o jogo ${offeredGame.name}.`;
+    const message = `${offeredGame.owner.name} está oferecendo o jogo ${offeredGame.name} em troca de ${desiredGame.name}.`;
     await notificationRepository.create(desiredGame.owner.id,message);
+    
     return newExchange;
 }
 async function updateExchange(userId:number,exchangeId:number,status:string) {
+
     const exchange = await exchangeRepository.findExchangeById(exchangeId);
     if(!exchange) throw notFoundError();
     if(exchange.desiredGame.owner.id !== userId) throw unauthorizedError('Somente o proprietário do jogo desejado pode atualizar o status da troca.');
+
     const updatedGame = await exchangeRepository.updateExchange(exchangeId,status);
+    await exchangeRepository.deleteExchangesByGameId(exchange.desiredGameId,exchange.offeredGameId);
+
     const {desiredGame, offeredGame} = updatedGame;
     const message = `${desiredGame.owner.name} aceitou sua troca. Inicie uma conversa no WhatsApp.`
     await notificationRepository.create(offeredGame.owner.id,message);

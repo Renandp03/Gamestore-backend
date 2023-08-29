@@ -41,7 +41,7 @@ async function createExchange(exchangeImput:exchangeImput){
 async function updateExchange(exchangeId:number,status:string) {
     return prisma.exchanges.update({
         where:{id:exchangeId},
-        data:{status},
+        data:{status,updatedAt: new Date()},
         include:{
             desiredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}},
             offeredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}}
@@ -53,12 +53,12 @@ async function deleteExchange(id:number) {
     return prisma.exchanges.delete({where:{id}});
 }
 
-async function deleteExchangesByGameId(id:number) {
+async function deleteExchangesByGameId(desiredGameId:number,offeredGameId:number) {
     return prisma.exchanges.deleteMany({
         where:{
             OR:[
-                {desiredGame:{id}},
-                {offeredGame:{id}}
+                {desiredGameId},
+                {offeredGameId}
             ],
             AND:[
                 {status:'REQUIRED'},
