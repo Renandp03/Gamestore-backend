@@ -5,6 +5,7 @@ import gameRouter from './routers/game-router.js';
 import favoritesRouter from './routers/favorite-router.js';
 import authRouter from './routers/auth-router.js';
 import exchangeRouter from './routers/exchange-router.js';
+import notificationRouter from './routers/notification-router.js';
 import { handleAplicationError } from './middlewares/handleAplicationError.js';
 
 const app = express();
@@ -15,8 +16,9 @@ app.use(express.json());
 app.use('/users',userRouter);
 app.use('/games',gameRouter);
 app.use('/favorites',favoritesRouter);
-app.use(authRouter);
+app.use('/notifications',notificationRouter);
 app.use('/exchange',exchangeRouter);
+app.use(authRouter);
 
 app.use(handleAplicationError);
 
