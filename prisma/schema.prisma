@@ -40,8 +40,8 @@ model exchanges {
   status                               String     @default("REQUIRED")
   createdAt                            DateTime   @db.Timestamp(6)  @default(now())
   updatedAt                            DateTime   @db.Timestamp(6)  @default(now())
-  desiredGame                          game       @relation("exchanges_desiredGameIdTogames", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
-  offeredGame                          game       @relation("exchanges_offeredGameIdTogames", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
+  desiredGame                          game       @relation("desired", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
+  offeredGame                          game       @relation("offered", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
 }
 
 model favorite {
@@ -53,16 +53,16 @@ model favorite {
 }
 
 model game {
-  id                                       Int         @id(map: "games_pk") @default(autoincrement())
+  id                                       Int            @id(map: "games_pk") @default(autoincrement())
   ownerId                                  Int
   consoleId                                Int
-  name                                     String      @db.VarChar
+  name                                     String         @db.VarChar
   image                                    String
-  exchanges_exchanges_desiredGameIdTogames exchanges[] @relation("exchanges_desiredGameIdTogames")
-  exchanges_exchanges_offeredGameIdTogames exchanges[] @relation("exchanges_offeredGameIdTogames")
+  where_is_desired                         exchanges[]    @relation("desired")
+  where_is_offered                         exchanges[]    @relation("offered")
   favorits                                 favorite[]
-  owner                                    user       @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk0")
-  platform                                 platform    @relation(fields: [consoleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk1")
+  owner                                    user           @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk0")
+  platform                                 platform       @relation(fields: [consoleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "games_fk1")
 }
 
 model state {
@@ -88,15 +88,23 @@ model session {
 }
 
 model user {
-  id        Int        @id(map: "users_pk") @default(autoincrement())
-  name      String     @db.VarChar
-  email     String     @unique @db.VarChar
-  password  String
-  phone     String     @db.VarChar(255)
-  addressId Int
-  image     String?
-  favorites  favorite[]
-  games     game[]
-  session  session?
+  id                Int        @id(map: "users_pk") @default(autoincrement())
+  name              String     @db.VarChar
+  email             String     @unique @db.VarChar
+  password          String
+  phone             String     @db.VarChar(255)
+  addressId         Int
+  image             String?
+  favorites         favorite[]
+  games             game[]
+  session           session?
+  notifications     notifications[]
   address   address    @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_fk0")
+}
+
+model notifications {
+  id        Int        @id(map: "notifications_pk") @default(autoincrement())
+  userId    Int
+  message   String     @db.VarChar(255)
+  user      user       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "notifications_fk0")
 }
