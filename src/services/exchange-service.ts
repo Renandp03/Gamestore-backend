@@ -24,13 +24,19 @@ async function postExchange(userId:number,exchangeImput: exchangeImput) : Promis
     if(!exchangeImput.desiredGameId || !exchangeImput.offeredGameId) throw badRequestError();
     if(exchangeImput.desiredGameId === exchangeImput.offeredGameId) throw badRequestError();
     const newExchange = await exchangeRepository.createExchange(exchangeImput);
+    const {offeredGame,desiredGame} = newExchange;
+    const message = `${offeredGame.owner.name} está oferecendo o jogo ${offeredGame.name}.`;
+    await notificationRepository.create(desiredGame.owner.id,message);
     return newExchange;
 }
 async function updateExchange(userId:number,exchangeId:number,status:string) {
     const exchange = await exchangeRepository.findExchangeById(exchangeId);
     if(!exchange) throw notFoundError();
     if(exchange.desiredGame.owner.id !== userId) throw unauthorizedError('Somente o proprietário do jogo desejado pode atualizar o status da troca.');
-    await exchangeRepository.updateExchange(exchangeId,status);
+    const updatedGame = await exchangeRepository.updateExchange(exchangeId,status);
+    const {desiredGame, offeredGame} = updatedGame;
+    const message = `${desiredGame.owner.name} aceitou sua troca. Inicie uma conversa no WhatsApp.`
+    await notificationRepository.create(offeredGame.owner.id,message);
   
 }
 async function deleteExchange(exchangeId:number, userId:number){

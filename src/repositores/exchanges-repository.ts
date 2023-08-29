@@ -8,8 +8,8 @@ async function findExchangeById(id:number) {
     return prisma.exchanges.findUnique({
         where:{id},
         include:{
-            desiredGame:{select:{owner:{select:{id:true,name:true,image:true}}}},
-            offeredGame:{select:{owner:{select:{id:true,name:true,image:true}}}}
+            desiredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}},
+            offeredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}}
         }
     });
 }
@@ -31,13 +31,21 @@ async function createExchange(exchangeImput:exchangeImput){
             desiredGameId:exchangeImput.desiredGameId,
             offeredGameId:exchangeImput.offeredGameId,
         },
+        include:{
+            desiredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}},
+            offeredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}}
+        }
     })
 }
 
 async function updateExchange(exchangeId:number,status:string) {
     return prisma.exchanges.update({
         where:{id:exchangeId},
-        data:{status}
+        data:{status},
+        include:{
+            desiredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}},
+            offeredGame:{select:{name:true,owner:{select:{id:true,name:true,image:true}}}}
+        }
     })
 }
 
