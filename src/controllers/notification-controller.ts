@@ -14,4 +14,10 @@ export async function getUserNotifications(req:AuthenticatedRequest,res:Response
     }
 }
 
+export async function getNotificationInfos(req:AuthenticatedRequest,res:Response, next:NextFunction){
+    try {
 
+    } catch (error) {
+        next(error);
+    }
+}

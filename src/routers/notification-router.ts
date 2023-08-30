@@ -5,6 +5,7 @@ const notificationRouter = Router();
 
 notificationRouter
   .all('/', authenticateToken)
-  .get('/',getUserNotifications);
+  .get('/',getUserNotifications)
+  .get('/:id',);
 
 export default notificationRouter;

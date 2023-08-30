@@ -42,6 +42,7 @@ model exchanges {
   updatedAt                            DateTime   @db.Timestamp(6)  @default(now())
   desiredGame                          game       @relation("desired", fields: [desiredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk0")
   offeredGame                          game       @relation("offered", fields: [offeredGameId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "exchanges_fk1")
+  notifications                        notifications[]   
 }
 
 model favorite {
@@ -103,8 +104,10 @@ model user {
 }
 
 model notifications {
-  id        Int        @id(map: "notifications_pk") @default(autoincrement())
-  userId    Int
-  message   String     @db.VarChar(255)
-  user      user       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "notifications_fk0")
+  id            Int               @id(map: "notifications_pk") @default(autoincrement())
+  userId        Int
+  exchangeId    Int?
+  message       String            @db.VarChar(255)
+  user          user              @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "notifications_fk0")
+  exchange      exchanges?        @relation(fields: [exchangeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "notifications_fk1")
 }
