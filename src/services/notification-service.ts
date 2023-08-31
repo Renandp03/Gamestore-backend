@@ -6,8 +6,13 @@ async function getUserNotifications(userId:number) : Promise <notification[]> {
     return notifications;
 }
 
+async function getNotificationInfos(notificationId:number) {
+    
+}
+
 const notificationService = {
-    getUserNotifications
+    getUserNotifications,
+    getNotificationInfos
 }
 
 export default notificationService;

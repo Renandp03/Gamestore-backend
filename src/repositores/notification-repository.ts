@@ -4,14 +4,21 @@ import prisma from '../config/database.js';
 async function findByUserId(userId:number) : Promise <notification[]> {
     return prisma.notifications.findMany({
         where:{userId},
-        include:{exchange:{
-            select:{
-                desiredGame:{select:{id:true,name:true, image:true,owner:{select:{id:true,name:true,image:true}}}},
-                offeredGame:{select:{id:true,name:true, image:true,owner:{select:{id:true,name:true,image:true}}}},
-
+        include:{
+            exchange:{
+                select:{
+                    desiredGame:{select:{id:true,name:true,owner:{select:{id:true,name:true,image:true}}}},
+                    offeredGame:{select:{id:true,name:true,owner:{select:{id:true,name:true,image:true}}}},
+                }
             }
-        }}
+        }
     });
+}
+
+async function findNotification(id:number) {
+    return prisma.notifications.findUnique({
+        where:{id},
+    })
 }
 
 async function create(userId:number,message:string, exchangeId?:number) {
@@ -30,6 +37,7 @@ export type notification = {
 
 const notificationRepository = {
     findByUserId,
+    findNotification,
     create,
     deleteByUserId
 }
