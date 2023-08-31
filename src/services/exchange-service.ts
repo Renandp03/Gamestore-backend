@@ -32,11 +32,11 @@ async function postExchange(userId:number,exchangeImput: exchangeImput) : Promis
 
     const {offeredGame,desiredGame} = newExchange;
     const message = `${offeredGame.owner.name} está oferecendo o jogo ${offeredGame.name} em troca de ${desiredGame.name}.`;
-    await notificationRepository.create(desiredGame.owner.id,message);
+    await notificationRepository.create(desiredGame.owner.id,message,newExchange.id);
     
     return newExchange;
 }
-async function updateExchange(userId:number,exchangeId:number,status:string) {
+async function updateExchange(userId:number,exchangeId:number,status:string) : Promise <void> {
 
     const exchange = await exchangeRepository.findExchangeById(exchangeId);
     if(!exchange) throw notFoundError();
@@ -47,7 +47,7 @@ async function updateExchange(userId:number,exchangeId:number,status:string) {
 
     const {desiredGame, offeredGame} = updatedGame;
     const message = `${desiredGame.owner.name} aceitou sua troca. Inicie uma conversa no WhatsApp.`
-    await notificationRepository.create(offeredGame.owner.id,message);
+    await notificationRepository.create(offeredGame.owner.id,message,exchangeId);
   
 }
 async function deleteExchange(exchangeId:number, userId:number){
